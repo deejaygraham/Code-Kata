@@ -7,6 +7,11 @@ namespace NumberSpeller
     {
 		private static Dictionary<long, string> understoodQuantities = new Dictionary<long, string>();
 
+        const long OneMillion = 1000000;
+        const long OneThousand = 1000;
+        const long OneHundred = 100;
+        const long Twenty = 20;
+
 		static NumberSpeller()
 		{
 			understoodQuantities.Add( 0, "zero");
@@ -39,44 +44,45 @@ namespace NumberSpeller
 			understoodQuantities.Add(90, "ninety");
 		}
 
+        public static string Units(this long value)
+        {
+            if (value >= OneMillion)
+                return " million";
+            else if (value >= OneThousand)
+                return " thousand";
+            else if (value >= OneHundred)
+                return " hundred";
+
+            return string.Empty;
+        }
+
+        public static string RemainderPrefix(this long value)
+        {
+            return (value >= OneHundred && value < OneThousand) ? " and " : " ";
+        }
+
 		public static string Spell(this long value)
 		{
             if (understoodQuantities.ContainsKey(value))
                 return understoodQuantities[value];
 
-            const long OneThousand = 1000;
-
-            if (value >= OneThousand)
-            {
-                long quotient = value / OneThousand;
-                long remainder = value % OneThousand;
-
-                string thousands = Spell(quotient);
-                string rest = string.Empty;
-
-                if (remainder > 0)
-                    rest = " " + Spell(remainder);
-
-                return thousands + " thousand" + rest;
-            }
-
-            const long OneHundred = 100;
-
             if (value >= OneHundred)
             {
-                long quotient = value / OneHundred;
-                long remainder = value % OneHundred;
+                long divisor = OneHundred;
 
-                string hundreds = Spell(quotient);
-                string rest = string.Empty;
+                if (value >= OneMillion)
+                    divisor = OneMillion;
+                else if (value >= OneThousand)
+                    divisor = OneThousand;
 
-                if (remainder > 0)
-                    rest = " and "+ Spell(remainder);
+                long quotient = value / divisor;
+                long remainder = value % divisor;
 
-                return hundreds + " hundred" + rest;
+                string quotientInWords = Spell(quotient);
+                string remainderInWords = (remainder > 0) ? value.RemainderPrefix() + Spell(remainder) : string.Empty;
+
+                return quotientInWords + value.Units() + remainderInWords;
             }
-
-            const long Twenty = 20;
 
             if (value > Twenty)
             {

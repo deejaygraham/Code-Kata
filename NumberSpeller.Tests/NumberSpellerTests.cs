@@ -77,6 +77,12 @@ namespace NumberSpeller.Tests
             AssertSpelling(512607, "five hundred and twelve thousand six hundred and seven");
         }
 
+        [Fact]
+        public void Spelling_43112603_Returns_Forty_Three_Million_One_Hundred_And_Twelve_Thousand_Six_Hundred_And_Three()
+        {
+            AssertSpelling(43112603, "forty three million one hundred and twelve thousand six hundred and three");
+        }
+
         private void AssertSpelling(long value, string text)
         {
             Assert.Equal(text, value.Spell());
