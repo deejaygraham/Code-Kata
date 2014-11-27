@@ -16,17 +16,42 @@ namespace CalcStats
 
         public double Average  { get; private set; }
 
+        public void Calculate(string delimitedText)
+        {
+            Calculate(delimitedText.Split(','));
+        }
+
+        public void Calculate(IEnumerable<string> values)
+        {
+            var intValues = new List<int>();
+
+            foreach (string value in values)
+            {
+                intValues.Add(Convert.ToInt32(value, 10);
+            }
+
+            Calculate(intValues);
+        }
+
         public void Calculate(IEnumerable<int> values)
         {
             this.Count = values.Count();
-            this.Minimum = Int32.MaxValue;
+            this.Minimum = this.FindMinimum(values);
             this.Maximum = this.FindMaximum(values);
-            this.Average = 0;
+            this.Average = this.CalculateAverage(values);
+        }
 
-                        
-            foreach(int value in values)
+        private double CalculateAverage(IEnumerable<int> values)
+        {
+            double sum = 0;
+
+            foreach (int value in values)
             {
+                sum += value;
             }
+
+            // or values.Average();
+            return sum / values.Count();
         }
 
         private int FindMinimum(IEnumerable<int> values)
