@@ -23,14 +23,7 @@ namespace CalcStats
 
         public void Calculate(IEnumerable<string> values)
         {
-            var intValues = new List<int>();
-
-            foreach (string value in values)
-            {
-                intValues.Add(Convert.ToInt32(value, 10);
-            }
-
-            Calculate(intValues);
+            Calculate(values.Select(value => Convert.ToInt32(value, 10)));
         }
 
         public void Calculate(IEnumerable<int> values)
@@ -43,15 +36,8 @@ namespace CalcStats
 
         private double CalculateAverage(IEnumerable<int> values)
         {
-            double sum = 0;
-
-            foreach (int value in values)
-            {
-                sum += value;
-            }
-
             // or values.Average();
-            return sum / values.Count();
+            return ((double) values.Sum()) / values.Count();
         }
 
         private int FindMinimum(IEnumerable<int> values)
